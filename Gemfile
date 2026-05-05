@@ -15,6 +15,9 @@ gem "sqlite3", "~> 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
+# Pin nio4r to a version compatible with Ruby 3.2
+gem "nio4r", ">= 2.7"
+
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 
@@ -64,8 +67,6 @@ group :development, :test do
 end
 
 group :development do
-  gem "solargraph"
-
   gem "erb_lint"
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
@@ -73,8 +74,6 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-
-  gem "hotwire-livereload", "~> 1.2"
 end
 
 group :test do
