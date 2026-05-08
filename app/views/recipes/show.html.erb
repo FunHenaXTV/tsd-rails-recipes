@@ -4,7 +4,21 @@
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
 
+    <% if alert.present? %>
+      <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
+    <% end %>
+
     <%= render @recipe %>
+
+    <div class="my-5">
+      <h3 class="font-bold text-xl">Ingredients</h3>
+
+      <%= render "ingredients/form", ingredient: @ingredient %>
+
+      <%- @recipe.ingredients.each do |ingredient|%>
+        <%= render ingredient %>
+      <% end %>
+    </div>
 
     <%= link_to 'Edit this recipe', edit_recipe_path(@recipe), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
     <div class="inline-block ml-2">

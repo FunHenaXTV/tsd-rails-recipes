@@ -1,5 +1,7 @@
 class RecipesController < ApplicationController
   before_action :set_recipe, only: %i[ show edit update destroy ]
+  after_action :verify_authorized, except: %i[ index show new create ]
+  rescue_from Pundit::NotAuthorizedError, with: :recipe_not_authorized
 
   # GET /recipes or /recipes.json
   def index
@@ -8,6 +10,7 @@ class RecipesController < ApplicationController
 
   # GET /recipes/1 or /recipes/1.json
   def show
+    @ingredient = Ingredient.new(recipe: @recipe)
   end
 
   # GET /recipes/new
@@ -17,6 +20,7 @@ class RecipesController < ApplicationController
 
   # GET /recipes/1/edit
   def edit
+    authorize @recipe
   end
 
   # POST /recipes or /recipes.json
@@ -36,6 +40,7 @@ class RecipesController < ApplicationController
 
   # PATCH/PUT /recipes/1 or /recipes/1.json
   def update
+    authorize @recipe
     respond_to do |format|
       if @recipe.update(recipe_params)
         format.html { redirect_to recipe_url(@recipe), notice: "Recipe was successfully updated." }
@@ -49,6 +54,7 @@ class RecipesController < ApplicationController
 
   # DELETE /recipes/1 or /recipes/1.json
   def destroy
+    authorize @recipe
     @recipe.destroy
 
     respond_to do |format|
@@ -65,6 +71,10 @@ class RecipesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def recipe_params
-      params.require(:recipe).permit(:title, :description, :creator_id)
+      params.require(:recipe).permit(:title, :description, :content, :creator_id)
+    end
+
+    def recipe_not_authorized
+      redirect_to recipe_url(@recipe), alert: "You are not authorized to perform this action."
     end
 end
